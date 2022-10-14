@@ -9,6 +9,7 @@ const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
+  const [showGraph, setIsGraphChecked] = React.useState(true);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
     columnWidth = 350;
@@ -55,7 +56,7 @@ const App = () => {
   };
 
   const handleClick = (task: Task) => {
-    console.log("On Click event Id:" + task.id);
+    console.log("On Click event Id:" + task.id, task);
   };
 
   const handleSelect = (task: Task, isSelected: boolean) => {
@@ -73,6 +74,8 @@ const App = () => {
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
         isChecked={isChecked}
+        onViewGraphChange={setIsGraphChecked}
+        showGraph={showGraph}
       />
       <h3>Gantt With Unlimited Height</h3>
       <Gantt
@@ -87,21 +90,7 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
-      />
-      <h3>Gantt With Limited Height</h3>
-      <Gantt
-        tasks={tasks}
-        viewMode={view}
-        onDateChange={handleTaskChange}
-        onDelete={handleTaskDelete}
-        onProgressChange={handleProgressChange}
-        onDoubleClick={handleDblClick}
-        onClick={handleClick}
-        onSelect={handleSelect}
-        onExpanderClick={handleExpanderClick}
-        listCellWidth={isChecked ? "155px" : ""}
-        ganttHeight={300}
-        columnWidth={columnWidth}
+        showGraph={showGraph}
       />
     </div>
   );

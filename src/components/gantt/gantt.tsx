@@ -65,6 +65,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   onDelete,
   onSelect,
   onExpanderClick,
+  showGraph = true
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const taskListRef = useRef<HTMLDivElement>(null);
@@ -97,7 +98,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(-1);
   const [ignoreScrollEvent, setIgnoreScrollEvent] = useState(false);
-
+    console.info({showGraph});
   // task change events
   useEffect(() => {
     let filteredTasks: Task[];
@@ -449,6 +450,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     TaskListHeader,
     TaskListTable,
   };
+  console.info({ganttEvent});
   return (
     <div>
       <div
@@ -458,14 +460,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         ref={wrapperRef}
       >
         {listCellWidth && <TaskList {...tableProps} />}
-        <TaskGantt
+        {showGraph && (<TaskGantt
           gridProps={gridProps}
           calendarProps={calendarProps}
           barProps={barProps}
           ganttHeight={ganttHeight}
           scrollY={scrollY}
           scrollX={scrollX}
-        />
+        />)}
         {ganttEvent.changedTask && (
           <Tooltip
             arrowIndent={arrowIndent}
@@ -493,13 +495,13 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
           rtl={rtl}
         />
       </div>
-      <HorizontalScroll
+      {showGraph && <HorizontalScroll
         svgWidth={svgWidth}
         taskListWidth={taskListWidth}
         scroll={scrollX}
         rtl={rtl}
         onScroll={handleScrollX}
-      />
+      />}
     </div>
   );
 };

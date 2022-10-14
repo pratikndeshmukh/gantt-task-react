@@ -1,4 +1,40 @@
-import { Task } from "../../dist/types/public-types";
+export declare type TaskType = "task" | "milestone" | "project";
+export interface Task {
+  id: string;
+  type: TaskType;
+  name: string;
+  start: Date;
+  end: Date;
+  /**
+   * From 0 to 100
+   */
+  progress: number;
+  styles?: {
+    backgroundColor?: string;
+    backgroundSelectedColor?: string;
+    progressColor?: string;
+    progressSelectedColor?: string;
+  };
+  isDisabled?: boolean;
+  project?: string;
+  dependencies?: string[];
+  hideChildren?: boolean;
+  displayOrder?: number;
+  additionalData?: any
+}
+
+const resources = [
+  {
+    id: 1,
+    name: 'Pratik',
+    email: 'pratik.@grr.la',
+    avatar: ''
+  }
+];
+
+const additionalData = {
+  resources
+}
 
 export function initTasks() {
   const currentDate = new Date();
@@ -12,6 +48,7 @@ export function initTasks() {
       type: "project",
       hideChildren: false,
       displayOrder: 1,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
@@ -28,6 +65,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 2,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
@@ -39,6 +77,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 3,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
@@ -50,6 +89,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 4,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -61,6 +101,7 @@ export function initTasks() {
       type: "task",
       project: "ProjectSample",
       displayOrder: 5,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
@@ -72,6 +113,7 @@ export function initTasks() {
       dependencies: ["Task 2"],
       project: "ProjectSample",
       displayOrder: 6,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
@@ -83,6 +125,7 @@ export function initTasks() {
       dependencies: ["Task 4"],
       project: "ProjectSample",
       displayOrder: 7,
+      additionalData
     },
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
@@ -92,8 +135,10 @@ export function initTasks() {
       progress: 0,
       isDisabled: true,
       type: "task",
+      additionalData
     },
   ];
+  console.info({ tasks });
   return tasks;
 }
 

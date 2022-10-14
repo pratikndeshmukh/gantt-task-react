@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { Task } from "../../types/public-types";
 import { BarTask } from "../../types/bar-task";
 import styles from "./tooltip.module.css";
@@ -112,6 +112,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
   );
 };
 
+const getResourceList = (list: any) => {
+  console.info({ list });
+  if (list) {
+    return list.map((resource: any) => {
+      return resource.name;
+    })
+  }
+  return ''
+}
+
 export const StandardTooltipContent: React.FC<{
   task: Task;
   fontSize: string;
@@ -121,15 +131,18 @@ export const StandardTooltipContent: React.FC<{
     fontSize,
     fontFamily,
   };
+  const currentDate = new Date();
+  const taskEndDate = new Date(task.end);
+  console.info({ task, fontSize, fontFamily });
+  const resourceList = useMemo(() => task && task.additionalData && getResourceList(task.additionalData.resources), [task]);
+  console.info({ resourceList });
+  const isTaskOverDue = useMemo(() => currentDate && taskEndDate && currentDate < new Date(task.end), [currentDate, task])
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
+      <b style={{ fontSize: fontSize + 6 }}>{`${task.name
+        }: ${task.start.getDate()}-${task.start.getMonth() + 1
+        }-${task.start.getFullYear()} - ${task.end.getDate()}-${task.end.getMonth() + 1
+        }-${task.end.getFullYear()}`}</b>
       {task.end.getTime() - task.start.getTime() !== 0 && (
         <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
           (task.end.getTime() - task.start.getTime()) /
@@ -140,6 +153,23 @@ export const StandardTooltipContent: React.FC<{
       <p className={styles.tooltipDefaultContainerParagraph}>
         {!!task.progress && `Progress: ${task.progress} %`}
       </p>
+
+      {resourceList && (
+        <p className={styles.tooltipDefaultContainerParagraph}>
+          Task Allocated: {resourceList.join(", ")}
+        </p>
+      )}
+
+      {resourceList && task.progress < 100 ?
+        (<p className={styles.tooltipDefaultContainerParagraph}>
+          Status: {isTaskOverDue ? 'On-Time' : 'Overdue'}
+        </p>)
+        :
+        (<p className={styles.tooltipDefaultContainerParagraph}>
+          Status: Completed { isTaskOverDue ? '': '(On-Time)' }
+        </p>)
+      }
+
     </div>
   );
 };

@@ -30,6 +30,7 @@ export interface Task {
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
+  additionalData?: any
 }
 
 export interface EventOption {
@@ -141,4 +142,5 @@ export interface StylingOption {
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   tasks: Task[];
+  showGraph?: boolean
 }
